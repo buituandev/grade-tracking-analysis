@@ -901,6 +901,9 @@ function updateRecommendedProblems(student) {
         let totalStudents = 0;
         let solvedCount = 0;
         
+        // Get total student count for correct percentage calculation
+        const allStudentsCount = window.students.length;
+        
         window.students.forEach(s => {
             if (s.grades && s.grades[i + 1] && s.grades[i + 1].score !== null) {
                 totalScore += s.grades[i + 1].score;
@@ -912,8 +915,10 @@ function updateRecommendedProblems(student) {
             }
         });
         
+        // Calculate average based on students who attempted the problem
         const averageScore = totalStudents > 0 ? totalScore / totalStudents : 0;
-        const solveRate = totalStudents > 0 ? solvedCount / totalStudents : 0;
+        // Calculate solve rate based on ALL students, not just those who submitted
+        const solveRate = solvedCount / allStudentsCount;
         
         // Calculate recommendation score (higher means more recommended)
         // Factors: high solve rate, high class average, low student score
@@ -1161,13 +1166,14 @@ function updateProblemsTable(student) {
         // Calculate class average
         let totalScore = 0;
         let totalStudents = 0;
+        let totalStudentsCount = window.students.length;
         window.students.forEach(s => {
             if (s.grades && s.grades[i + 1] && s.grades[i + 1].score !== null) {
                 totalScore += s.grades[i + 1].score;
                 totalStudents++;
             }
         });
-        const avgScore = totalStudents > 0 ? Math.round(totalScore / totalStudents) : 0;
+        const avgScore = totalStudentsCount > 0 ? Math.round(totalScore / totalStudentsCount) : 0;
         
         // Determine status
         let status = '';
